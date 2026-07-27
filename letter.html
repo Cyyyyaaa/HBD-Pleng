@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>A Letter — Thank You for Being Born</title>
+  <meta name="description" content="A letter, just for you." />
+  <meta name="theme-color" content="#0D1B2A" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:ital,wght@0,300;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animation.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#letter-main">Skip to letter</a>
+
+  <main id="letter-main" aria-label="A letter">
+    <section class="scene scene--night" data-scene="letter" aria-label="A letter">
+      <div class="scene__inner center-col">
+        <p class="eyebrow on-dark reveal">มีข้อความอวยพรให้ด้วยคับบ<span data-bind="nickname">น้องเพลง</span></p>
+
+        <div class="envelope-wrap reveal reveal--scale">
+          <div class="envelope" role="button" tabindex="0" aria-label="Open the letter">
+            <div class="envelope__body"></div>
+            <div class="envelope__letter"></div>
+            <div class="envelope__flap"></div>
+            <div class="envelope__seal" aria-hidden="true">✦</div>
+          </div>
+        </div>
+        <p class="tap-hint-light">แตะซองจดหมายเพื่อเปิดอ่าน</p>
+
+        <div class="letter-paper" aria-live="polite">
+          <div class="letter-body"></div>
+        </div>
+
+        <div class="page-nav reveal">
+          <a class="btn btn--ghost-dark" href="wish.html">ไปดูดาวแห่งคำอวยพร →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="life-thread" aria-hidden="true">
+    <div class="thread-line"></div>
+    <div class="thread-light"></div>
+  </div>
+
+  <button id="music-toggle" type="button" aria-pressed="false" aria-label="Mute background music">
+    <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+    </svg>
+    <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16 9l5 6M21 9l-5 6" />
+    </svg>
+  </button>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/scroll.js"></script>
+  <script src="assets/js/typing.js"></script>
+  <script src="assets/js/music.js"></script>
+  <script>
+    /**
+     * Page-local init for letter.html: loads profile data for the name
+     * binding and the letter paragraphs, wires up the envelope-open
+     * interaction, and boots the shared reveal/music modules directly
+     * (this page doesn't go through app.js's loading-screen boot flow).
+     */
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { loadJSON, qs, qsa } = window.Utils;
+
+      const profile = await loadJSON('data/profile.json');
+      const letterLines = (profile && profile.letter) || [];
+
+      if (profile) {
+        qsa('[data-bind="name"]').forEach((el) => (el.textContent = profile.name));
+        qsa('[data-bind="nickname"]').forEach((el) => (el.textContent = profile.nickname));
+      }
+
+      window.Scroll.init(document);
+      window.Music.init(document);
+
+      const envelope = qs('.envelope');
+      const paper = qs('.letter-paper');
+      const body = qs('.letter-body');
+      let opened = false;
+
+      async function openLetter() {
+        if (opened || !envelope || !paper || !body) return;
+        opened = true;
+        envelope.classList.add('is-open');
+        window.Music.playClick();
+
+        setTimeout(async () => {
+          paper.classList.add('is-visible');
+          for (const paragraph of letterLines) {
+            const p = document.createElement('p');
+            p.style.marginBottom = '1em';
+            body.appendChild(p);
+            await window.Typing.type(p, paragraph, { speed: 20, keepCursor: false });
+          }
+        }, 500);
+      }
+
+      if (envelope) {
+        envelope.addEventListener('click', openLetter);
+        envelope.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLetter();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

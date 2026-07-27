@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Kanit:wght@300;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/animation.css" />
+  <style>
+    #not-found-stars { position: fixed; inset: 0; }
+    .nf-mark { font-family: var(--font-display); color: var(--color-gold); font-size: var(--fs-caption); letter-spacing: var(--ls-wide); text-transform: uppercase; margin-bottom: var(--space-sm); }
+    .nf-title { font-family: var(--font-display); font-size: var(--fs-h2); margin-bottom: var(--space-sm); }
+    .nf-copy { color: rgba(255,255,255,0.7); margin-bottom: var(--space-lg); }
+  </style>
+</head>
+<body>
+  <div class="page-fallback">
+    <canvas id="not-found-stars" aria-hidden="true"></canvas>
+    <div class="center-col" style="position:relative;z-index:1;">
+      <p class="nf-mark">✦ Lost page</p>
+      <h1 class="nf-title">เน็ตกากเปล่า 55555</h1>
+      <p class="nf-copy">ล้อเล่นนนน กดใหม่สิ หรือ เข้าใหม่ก็ได้ครับ</p>
+      <a class="btn btn--gold" href="/">กดอีกทีตรงนี้</a>
+    </div>
+  </div>
+
+  <script src="assets/js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('not-found-stars');
+      if (canvas && window.Utils) window.Utils.drawStarfield(canvas, { density: 5000 });
+    });
+  </script>
+</body>
+</html>

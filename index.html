@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Thank You for Being Born</title>
+  <meta name="description" content="A short, cinematic birthday film — for someone special." />
+  <meta name="theme-color" content="#0D1B2A" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:ital,wght@0,300;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animation.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="assets/css/lockscreen.css" />
+</head>
+<body>
+  <a class="skip-link" href="#scenes-root"></a>
+
+  <!-- Scene 0 — Passcode Lock (shown before anything else, incl. Loading) -->
+  <div id="lock-screen" role="dialog" aria-modal="true" aria-label="ใส่รหัสผ่านเพื่อเข้าเว็บ">
+    <canvas id="lock-stars" class="stars-canvas" aria-hidden="true"></canvas>
+
+    <div class="lock-card">
+      <p class="lock-mark" aria-hidden="true">✦</p>
+      <p class="lock-hint">ใส่รหัสผ่าน<br /><span>วันเกิดน้องเพลง</span> 🤍</p>
+
+      <div class="lock-dots" id="lock-dots" aria-hidden="true"></div>
+
+      <p class="lock-message" id="lock-message" aria-live="polite">&nbsp;</p>
+
+      <div class="lock-keypad" id="lock-keypad">
+        <button type="button" class="lock-key" data-key="1">1</button>
+        <button type="button" class="lock-key" data-key="2">2</button>
+        <button type="button" class="lock-key" data-key="3">3</button>
+        <button type="button" class="lock-key" data-key="4">4</button>
+        <button type="button" class="lock-key" data-key="5">5</button>
+        <button type="button" class="lock-key" data-key="6">6</button>
+        <button type="button" class="lock-key" data-key="7">7</button>
+        <button type="button" class="lock-key" data-key="8">8</button>
+        <button type="button" class="lock-key" data-key="9">9</button>
+        <span class="lock-key lock-key--spacer" aria-hidden="true"></span>
+        <button type="button" class="lock-key" data-key="0">0</button>
+        <button type="button" class="lock-key lock-key--back" data-key="back" aria-label="ลบตัวเลข">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 1 — Loading -->
+  <div id="loading-screen" role="status" aria-label="Loading">
+    <canvas id="loading-stars" class="stars-canvas" aria-hidden="true"></canvas>
+    <p class="loading-mark">✦</p>
+    <div class="loading-bar"><span></span></div>
+    <p class="loading-caption">กำลังเตรียมตัวเซอร์ไพรส์</p>
+  </div>
+
+  <!-- Intro, countdown+beginning, and gallery are fetched from /sections and
+       mounted here, in order, by assets/js/app.js. The letter, wishes, and
+       cake moments continue on their own pages: letter.html, wish.html,
+       cake.html. -->
+  <main id="scenes-root" aria-label="Story"></main>
+
+  <!-- Persistent chrome, present across the whole scroll -->
+  <div id="life-thread" aria-hidden="true">
+    <div class="thread-line"></div>
+    <div class="thread-light"></div>
+  </div>
+
+  <nav id="scene-dots" aria-label="Scene navigation"></nav>
+
+  <button id="music-toggle" type="button" aria-pressed="false" aria-label="Mute background music">
+    <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+    </svg>
+    <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16 9l5 6M21 9l-5 6" />
+    </svg>
+  </button>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/lockscreen.js"></script>
+  <script src="assets/js/loading.js"></script>
+  <script src="assets/js/scroll.js"></script>
+  <script src="assets/js/typing.js"></script>
+  <script src="assets/js/gallery.js"></script>
+  <script src="assets/js/polaroid.js"></script>
+  <script src="assets/js/music.js"></script>
+  <script src="assets/js/countdown.js"></script>
+  <script src="assets/js/confetti.js"></script>
+  <script src="assets/js/wishes.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

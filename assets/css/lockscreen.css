@@ -1,0 +1,163 @@
+/* ==========================================================================
+   lockscreen.css
+   The very first screen — a cute, minimal PIN lock in the site's own
+   palette/type, sitting above everything else (including the loading
+   screen) until the correct code is entered.
+   ========================================================================== */
+
+#lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 110; /* above #loading-screen (var(--z-loading): 100) */
+  background: var(--color-night);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  transition: opacity var(--dur-slow) var(--ease-soft), visibility var(--dur-slow) var(--ease-soft);
+}
+#lock-screen.is-unlocking { pointer-events: none; }
+#lock-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lock-card {
+  position: relative;
+  z-index: 1;
+  width: min(320px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lock-mark {
+  color: var(--color-gold);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-sm);
+  animation: pulse-soft 2.6s ease-in-out infinite;
+}
+
+.lock-hint {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: var(--lh-normal);
+  color: var(--color-white);
+  margin-bottom: var(--space-lg);
+}
+.lock-hint span {
+  display: inline-block;
+  margin-top: 2px;
+  font-family: var(--font-accent);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-mid);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---- pin dots ---------------------------------------------------------- */
+
+.lock-dots {
+  display: flex;
+  gap: 14px;
+  margin-bottom: var(--space-md);
+}
+
+.lock-dots .dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(247, 208, 96, 0.45);
+  background: transparent;
+  transition: transform 0.25s var(--ease-out), background 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out);
+}
+.lock-dots .dot.is-filled {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  transform: scale(1.15);
+}
+
+/* little pop the instant a digit lands */
+.lock-dots .dot.is-pop { animation: dot-pop 0.35s var(--ease-out); }
+
+@keyframes dot-pop {
+  0%   { transform: scale(1.15); }
+  40%  { transform: scale(1.5); }
+  100% { transform: scale(1.15); }
+}
+
+/* wrong-code shake */
+.lock-card.is-shaking { animation: lock-shake 0.5s var(--ease-out); }
+
+@keyframes lock-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-10px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-6px); }
+  80%      { transform: translateX(4px); }
+}
+
+/* correct-code unlock: card breathes once, then the whole screen fades (see #lock-screen.is-hidden) */
+.lock-card.is-unlocked { animation: lock-unlock 0.6s var(--ease-out) forwards; }
+
+@keyframes lock-unlock {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.lock-message {
+  min-height: 1.4em;
+  font-family: var(--font-accent);
+  font-size: var(--fs-small);
+  color: rgba(248, 200, 220, 0.9); /* blush */
+  margin-bottom: var(--space-sm);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+}
+.lock-message.is-visible { opacity: 1; }
+.lock-message.is-success { color: var(--color-gold); }
+
+/* ---- keypad ------------------------------------------------------------ */
+
+.lock-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  gap: 14px;
+  justify-content: center;
+}
+
+.lock-key {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba(247, 208, 96, 0.2);
+  background: rgba(247, 208, 96, 0.06);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s var(--ease-out), background 0.15s var(--ease-out),
+              border-color 0.15s var(--ease-out);
+}
+.lock-key:hover { border-color: rgba(247, 208, 96, 0.5); }
+.lock-key:active,
+.lock-key.is-pressed {
+  transform: scale(0.9);
+  background: rgba(247, 208, 96, 0.22);
+}
+
+.lock-key--spacer { visibility: hidden; pointer-events: none; }
+.lock-key--back {
+  font-size: 1.1rem;
+  color: rgba(248, 200, 220, 0.85);
+}
+
+@media (max-width: 375px) {
+  .lock-keypad { grid-template-columns: repeat(3, 56px); gap: 10px; }
+  .lock-key { width: 56px; height: 56px; font-size: 1.1rem; }
+}

@@ -1,0 +1,46 @@
+<!-- Scene 3 : Countdown -->
+<section class="scene scene--night"
+         data-scene="countdown"
+         aria-label="Countdown">
+
+    <div class="scene__inner center-col">
+
+        <p class="countdown-digit">
+            3
+        </p>
+
+        <p class="countdown-date">
+            <span data-bind="thisYearDate">
+                09 August 2026
+            </span>
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- Scene 4 : The Beginning -->
+<!-- ===================================================== -->
+
+<section class="scene scene--paper"
+         data-scene="beginning"
+         aria-label="The beginning of the story">
+
+    <div class="scene__inner scene__inner--narrow center-col">
+
+        <!-- Typewriter -->
+        <p class="story-line"
+           aria-live="polite">
+        </p>
+
+        <!-- Revealed by polaroid.js once typing finishes -->
+        <figure class="polaroid beginning-polaroid" id="beginning-polaroid" aria-hidden="true">
+          <img src="" alt="" loading="lazy" decoding="async" />
+          <figcaption></figcaption>
+        </figure>
+
+    </div>
+
+</section>

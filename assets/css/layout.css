@@ -1,0 +1,120 @@
+/* ==========================================================================
+   layout.css — page scaffolding & the scene system
+   Each "scene" is a full-height section the story scrolls through.
+   ========================================================================== */
+
+#scenes-root { position: relative; }
+
+.scene {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--edge);
+  overflow: hidden;
+}
+
+.scene--paper { background: var(--color-paper); color: var(--color-ink); }
+.scene--night {
+  background: linear-gradient(180deg, #0a1420 0%, var(--color-night) 55%, #0a1622 100%);
+  color: var(--color-white);
+}
+
+.scene__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.scene__inner--narrow { max-width: var(--measure); margin-inline: auto; }
+
+/* ---- the signature: a vertical "life thread" that runs alongside the
+   story. A small light travels down it as the page is scrolled, and
+   brightens as the story warms up — it is lit fully at the wish scene
+   and becomes the candle flame in the cake scene. ---- */
+
+#life-thread {
+  position: fixed;
+  right: clamp(0.9rem, 3vw, 2.25rem);
+  top: 8vh;
+  height: 84vh;
+  width: 2px;
+  z-index: var(--z-thread);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-med) var(--ease-out);
+}
+#life-thread.is-visible { opacity: 1; }
+
+#life-thread .thread-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(13,27,42,0.08), rgba(13,27,42,0.2));
+  border-radius: 2px;
+}
+
+#life-thread .thread-light {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-gold);
+  box-shadow: 0 0 10px 3px rgba(247, 208, 96, 0.55);
+  transition: top 0.05s linear;
+}
+
+/* ---- reveal-on-scroll base state -------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+.reveal--blur { filter: blur(14px); }
+.reveal--blur.in-view { filter: blur(0); }
+
+.reveal--scale { transform: translateY(28px) scale(0.94); }
+.reveal--scale.in-view { transform: translateY(0) scale(1); }
+
+.reveal-stagger > * { transition-delay: calc(var(--i, 0) * 110ms); }
+
+/* ---- container helpers ------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--edge);
+}
+
+.stars-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* generic page (404) */
+.page-fallback {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-night);
+  color: var(--color-white);
+  text-align: center;
+  padding: var(--space-md);
+}

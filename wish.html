@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Wishes — Thank You for Being Born</title>
+  <meta name="description" content="A sky full of wishes." />
+  <meta name="theme-color" content="#0D1B2A" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:ital,wght@0,300;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animation.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#wish-main">Skip to wishes</a>
+
+  <main id="wish-main" aria-label="Birthday wishes">
+    <section class="scene scene--night" data-scene="wishes" aria-label="Birthday wishes">
+      <div class="scene__inner center-col">
+        <p class="eyebrow on-dark reveal">แตะดาวแต่ละดวง</p>
+        <h2 class="reveal">ท้องฟ้าที่เต็มไปด้วยคำอวยพร</h2>
+        <div id="wish-sky" class="wish-sky" role="group" aria-label="Night sky with hidden wishes"></div>
+        <p id="wish-progress" class="wish-progress" aria-live="polite"></p>
+
+        <div class="page-nav reveal">
+          <a class="btn btn--ghost-dark" href="cake.html">ไปเป่าเทียนกัน →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="life-thread" aria-hidden="true">
+    <div class="thread-line"></div>
+    <div class="thread-light"></div>
+  </div>
+
+  <button id="music-toggle" type="button" aria-pressed="false" aria-label="Mute background music">
+    <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+    </svg>
+    <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16 9l5 6M21 9l-5 6" />
+    </svg>
+  </button>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/scroll.js"></script>
+  <script src="assets/js/music.js"></script>
+  <script src="assets/js/wishes.js"></script>
+  <script>
+    /**
+     * Page-local init for wish.html. Boots the shared reveal/music modules
+     * directly and mounts the star-wish interaction against this page's
+     * own #wish-sky element.
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      window.Scroll.init(document);
+      window.Music.init(document);
+      window.Wishes.init(document);
+    });
+  </script>
+</body>
+</html>

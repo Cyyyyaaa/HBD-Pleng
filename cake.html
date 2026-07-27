@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ขอพรก่อนนะคับบบ - ค่อยเป่า</title>
+  <meta name="description" content="Make a wish, and blow out the candle." />
+  <meta name="theme-color" content="#0D1B2A" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:ital,wght@0,300;0,500;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animation.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#cake-main">Skip to cake</a>
+
+  <main id="cake-main" aria-label="Make a wish and the closing scene">
+    <section class="scene scene--night" data-scene="cake" aria-label="Make a wish">
+      <div class="balloon-field" aria-hidden="true"></div>
+      <div class="scene__inner cake-wrap">
+        <p class="eyebrow on-dark reveal">เป่าเทียนกันน</p>
+        <h2 class="reveal">ขอพรก่อนเป่าน้าาาา</h2>
+
+        <svg class="cake reveal reveal--scale" viewBox="0 0 200 220" aria-hidden="true">
+          <g class="smoke">
+            <path d="M100 60 Q108 48 100 38 Q92 28 100 18" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="4" stroke-linecap="round" />
+          </g>
+          <g class="flame">
+            <path d="M100 40c6 10 10 16 10 24a10 10 0 0 1-20 0c0-8 4-14 10-24z" fill="#F7D060" />
+          </g>
+          <rect x="97" y="62" width="6" height="18" fill="#E8C77A" />
+          <rect x="40" y="150" width="120" height="55" rx="8" fill="#F8C8DC" />
+          <rect x="40" y="120" width="120" height="35" rx="8" fill="#FFF8F4" />
+          <rect x="50" y="90" width="100" height="34" rx="8" fill="#F8C8DC" />
+          <rect x="30" y="200" width="140" height="12" rx="4" fill="#F7D060" />
+          <circle cx="70" cy="140" r="4" fill="#F7D060" />
+          <circle cx="130" cy="140" r="4" fill="#0D1B2A" />
+          <circle cx="100" cy="170" r="4" fill="#F7D060" />
+          <circle cx="60" cy="180" r="4" fill="#0D1B2A" />
+          <circle cx="140" cy="180" r="4" fill="#F7D060" />
+        </svg>
+
+        <div class="blow-controls reveal">
+          <button class="btn btn--gold blow-btn" type="button">เป่าเทียน</button>
+          <button class="btn btn--ghost-dark mic-btn" type="button">หรือเป่าผ่านไมโครโฟน</button>
+          <div class="mic-meter" aria-hidden="true"><span></span></div>
+          <p class="blow-status muted on-dark" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--night" data-scene="ending" aria-label="Closing">
+      <canvas class="stars-canvas" id="ending-stars" aria-hidden="true"></canvas>
+      <div class="scene__inner center-col" style="position:relative; z-index:2;">
+        <p class="ending-line ending-line--1"></p>
+        <p class="ending-final" style="margin-top: 2.5rem;"></p>
+      </div>
+    </section>
+  </main>
+
+  <div id="life-thread" aria-hidden="true">
+    <div class="thread-line"></div>
+    <div class="thread-light"></div>
+  </div>
+
+  <button id="music-toggle" type="button" aria-pressed="false" aria-label="Mute background music">
+    <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+    </svg>
+    <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M4 9v6h4l5 5V4L8 9H4z" />
+      <path d="M16 9l5 6M21 9l-5 6" />
+    </svg>
+  </button>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/scroll.js"></script>
+  <script src="assets/js/typing.js"></script>
+  <script src="assets/js/confetti.js"></script>
+  <script src="assets/js/music.js"></script>
+  <script>
+    /**
+     * Page-local init for cake.html. Wires up the blow-the-candle
+     * interaction (button or microphone), fires confetti + balloons, then
+     * — once the visitor scrolls down into the closing scene — types out
+     * the final two lines over a quiet star field.
+     */
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { loadJSON, qs, drawStarfield } = window.Utils;
+
+      window.Scroll.init(document);
+      window.Music.init(document);
+
+      const profile = await loadJSON('data/profile.json');
+      const endingLines = (profile && profile.endingLines) || [];
+
+      // ---- Blow out the candle -------------------------------------------
+      const cakeScene = qs('[data-scene="cake"]');
+      const cake = qs('.cake', cakeScene);
+      const blowBtn = qs('.blow-btn', cakeScene);
+      const micBtn = qs('.mic-btn', cakeScene);
+      const meter = qs('.mic-meter span', cakeScene);
+      const status = qs('.blow-status', cakeScene);
+      let blown = false;
+
+      function blowOut() {
+        if (blown || !cake) return;
+        blown = true;
+        cake.classList.add('is-blown');
+        window.Confetti.celebrate(cakeScene);
+        window.Music.playClick();
+        if (status) {
+          status.textContent = 'ขอพรเรียบร้อยแล้ว 🎂 เลื่อนลงเพื่ออ่านต่อ';
+          status.style.color = '#F7D060'; // เปลี่ยนสีตัวอักษร
+        }
+      }
+
+      if (blowBtn) blowBtn.addEventListener('click', blowOut);
+
+      if (micBtn) {
+        micBtn.addEventListener('click', async () => {
+          if (!navigator.mediaDevices?.getUserMedia) {
+            blowOut();
+            return;
+          }
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioCtx.createMediaStreamSource(stream);
+            const analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 512;
+            source.connect(analyser);
+            const data = new Uint8Array(analyser.frequencyBinCount);
+
+            const check = () => {
+              analyser.getByteFrequencyData(data);
+              const avg = data.reduce((a, b) => a + b, 0) / data.length;
+              if (meter) meter.style.width = `${Math.min(100, avg * 1.6)}%`;
+              if (avg > 42) {
+                blowOut();
+                stream.getTracks().forEach((t) => t.stop());
+                audioCtx.close();
+                return;
+              }
+              if (!blown) requestAnimationFrame(check);
+            };
+            check();
+          } catch (err) {
+            console.warn('Microphone unavailable, falling back to button blow:', err.message);
+            blowOut();
+          }
+        });
+      }
+
+      // ---- Closing scene: star field + typed farewell ---------------------
+      const endingScene = qs('[data-scene="ending"]');
+      const canvas = qs('#ending-stars', endingScene);
+      if (canvas) drawStarfield(canvas, { density: 4500 });
+
+      const line1 = qs('.ending-line--1', endingScene);
+      const line2 = qs('.ending-final', endingScene);
+
+      if (endingScene) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(async (entry) => {
+              if (entry.isIntersecting) {
+                io.disconnect();
+                if (line1 && endingLines[0]) {
+                  await window.Typing.type(line1, endingLines[0], { speed: 45 });
+                }
+                await new Promise((r) => setTimeout(r, 1200));
+                if (line2 && endingLines[1]) {
+                  line2.classList.add('reveal');
+                  requestAnimationFrame(() => line2.classList.add('in-view'));
+                  line2.textContent = endingLines[1];
+                }
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+        io.observe(endingScene);
+      }
+    });
+  </script>
+</body>
+</html>

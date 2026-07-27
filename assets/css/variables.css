@@ -1,0 +1,73 @@
+/* ==========================================================================
+   variables.css
+   Design tokens. Every color, type size, spacing unit and timing value
+   used across the project should be derived from here — nowhere else.
+   ========================================================================== */
+
+:root {
+  /* ---- Palette -------------------------------------------------------- */
+  --color-paper:      #FFF8F4; /* primary background — warm, not white */
+  --color-blush:      #F8C8DC; /* accent — polaroid tape, soft glows   */
+  --color-night:      #0D1B2A; /* dark scenes — sky, envelope, cake    */
+  --color-gold:       #F7D060; /* candlelight, stars, focus highlight  */
+  --color-white:      #FFFFFF;
+
+  --color-night-2:    #16283d; /* lifted night, for cards on dark bg   */
+  --color-night-3:    #223449; /* lifted further, borders on dark bg   */
+  --color-ink:        #24211f; /* body text on paper                  */
+  --color-ink-soft:    rgba(36, 33, 31, 0.62);
+  --color-paper-soft:  rgba(255, 248, 244, 0.72);
+  --color-hairline:    rgba(13, 27, 42, 0.12);
+  --color-hairline-dark: rgba(247, 208, 96, 0.18);
+
+  /* ---- Typography ------------------------------------------------------ */
+  --font-display: 'Kanit', 'Poppins', sans-serif;      /* voice / headlines  */
+  --font-body:    'Inter', sans-serif;                  /* reading copy      */
+  --font-accent:  'Poppins', sans-serif;                /* labels, captions  */
+
+  --fs-caption:  0.75rem;
+  --fs-small:    0.95rem;
+  --fs-body:     1.05rem;
+  --fs-lead:     1.35rem;
+  --fs-h3:       clamp(1.35rem, 3vw, 1.8rem);
+  --fs-h2:       clamp(2rem, 5vw, 3rem);
+  --fs-h1:       clamp(2.6rem, 8vw, 5.2rem);
+  --fs-display:  clamp(3rem, 11vw, 7.5rem);
+
+  --lh-tight: 1.1;
+  --lh-normal: 1.5;
+  --lh-loose: 1.8;
+
+  --ls-wide: 0.28em;
+  --ls-mid: 0.12em;
+
+  /* ---- Spacing scale (8pt-ish, tuned) ----------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.85rem;
+  --space-sm:  1.25rem;
+  --space-md:  2rem;
+  --space-lg:  3.5rem;
+  --space-xl:  5.5rem;
+  --space-2xl: 8rem;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  --measure: 42rem;
+  --edge: clamp(1.25rem, 6vw, 4rem);
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.35s;
+  --dur-med: 0.9s;
+  --dur-slow: 1.6s;
+
+  /* ---- Z-index scale ------------------------------------------------------ */
+  --z-thread: 40;
+  --z-nav: 45;
+  --z-overlay: 60;
+  --z-loading: 100;
+}

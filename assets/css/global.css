@@ -1,0 +1,114 @@
+/* ==========================================================================
+   global.css — base element styling & utility classes
+   ========================================================================== */
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+}
+
+p { max-width: var(--measure); }
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.on-dark .eyebrow { color: rgba(247, 208, 96, 0.75); }
+
+.on-dark { color: var(--color-white); }
+.on-dark p { color: rgba(255, 255, 255, 0.78); }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-sm);
+  top: -3rem;
+  background: var(--color-night);
+  color: var(--color-gold);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  z-index: var(--z-overlay);
+  transition: top var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { top: var(--space-sm); }
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---- buttons ---------------------------------------------------------- */
+
+.btn {
+  font-family: var(--font-accent);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-mid);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 0.9em 1.9em;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  transition: transform var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn--gold {
+  color: var(--color-night);
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+.btn--gold:hover { background: #ffdd85; }
+
+.btn--ghost-dark {
+  color: var(--color-gold);
+  background: transparent;
+}
+.btn--ghost-dark:hover { background: rgba(247, 208, 96, 0.1); }
+
+.btn--ghost-light {
+  color: var(--color-night);
+  background: transparent;
+}
+.btn--ghost-light:hover { background: rgba(13, 27, 42, 0.06); }
+
+/* ---- misc utility ------------------------------------------------------ */
+
+.center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.muted { color: var(--color-ink-soft); }

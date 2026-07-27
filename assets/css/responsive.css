@@ -1,0 +1,41 @@
+/* ==========================================================================
+   responsive.css — mobile-first; base styles in other files already target
+   small screens. This file layers up for larger viewports and trims a
+   few things down for the very smallest phones (iPhone SE).
+   ========================================================================== */
+
+/* ---- iPhone SE / very small phones (<=375px) --------------------------- */
+@media (max-width: 375px) {
+  :root {
+    --edge: 1rem;
+  }
+  .polaroid-field { min-height: 520px; }
+  #scene-dots { display: none; }
+}
+
+/* ---- default: nav dots hidden on touch/mobile, shown from tablet up ---- */
+#scene-dots { display: none; }
+
+/* ---- tablet (>=768px) --------------------------------------------------- */
+@media (min-width: 768px) {
+  /* reserved for future tablet-only adjustments */
+}
+
+/* ---- desktop (>=1024px) -------------------------------------------------- */
+@media (min-width: 1024px) {
+  #scene-dots { display: flex; }
+
+  .scene { padding-inline: var(--edge); }
+
+  .polaroid-field { min-height: 760px; }
+}
+
+/* ---- large desktop (>=1440px) -------------------------------------------- */
+@media (min-width: 1440px) {
+  .scene__inner { max-width: 78rem; }
+}
+
+/* ---- short viewports (landscape phones) ---------------------------------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .scene { min-height: auto; padding-block: var(--space-lg); }
+}
