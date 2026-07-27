@@ -1,17 +1,24 @@
 /**
  * typing.js
- * Pure typewriter engine — no scene-specific logic (polaroids, lightboxes,
- * etc. live in polaroid.js now). Exposes:
- *   Typing.type(el, text, opts)     -> types text into el
- *   Typing.erase(el, opts)          -> erases el's current text, char by char
- *   Typing.typeSequence(el, lines, opts) -> types each line; by default
- *     erases (backspace-style) before typing the next line, instead of
- *     swapping text abruptly.
+ * Typewriter engine with full Thai language support (Grapheme Cluster Segmentation).
  */
 (function () {
   const { prefersReducedMotion } = window.Utils;
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  /**
+   * Helper function ในการแยกข้อความออกเป็น Grapheme Clusters
+   * เพื่อรวมพยัญชนะ + สระบน/ล่าง + วรรณยุกต์ ให้เป็น 1 หน่วยอักษรที่ไม่แยกออกจากกัน
+   */
+  function splitIntoGraphemes(text) {
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const segmenter = new Intl.Segmenter('th', { granularity: 'grapheme' });
+      return Array.from(segmenter.segment(text), (s) => s.segment);
+    }
+    // Fallback สำหรับเบราว์เซอร์รุ่นเก่ามากๆ
+    return text.match(/[\u0E00-\u0E7F][\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]*|[^\u0E00-\u0E7F]/g) || Array.from(text);
+  }
 
   /**
    * @param {HTMLElement} el
@@ -41,11 +48,23 @@
         el.appendChild(cursorEl);
       }
 
+      // แยกข้อความภาษาไทยเป็นกลุ่มอักษรที่ถูกต้อง
+      const characters = splitIntoGraphemes(text);
+      let currentText = '';
       let i = 0;
+
       const tick = () => {
-        if (i < text.length) {
-          const char = document.createTextNode(text[i]);
-          el.insertBefore(char, cursorEl && cursorEl.isConnected ? cursorEl : null);
+        if (i < characters.length) {
+          currentText += characters[i];
+
+          // ใช้ Text Node เดียวและอัปเดต textContent เพื่อป้องกันปัญหา Text Node แยกส่วนทำให้สระไม่ลอย
+          let firstChild = el.firstChild;
+          if (!firstChild || firstChild.nodeType !== Node.TEXT_NODE) {
+            firstChild = document.createTextNode('');
+            el.insertBefore(firstChild, cursorEl && cursorEl.isConnected ? cursorEl : null);
+          }
+          firstChild.textContent = currentText;
+
           i += 1;
           setTimeout(tick, speed);
         } else {
@@ -60,8 +79,6 @@
   /**
    * Erases whatever text currently sits in `el`, one character at a time
    * from the end (a backspace effect), leaving only the cursor behind.
-   * @param {number} [opts.speed=22] ms per character while erasing — faster
-   *   than typing feels natural, like a real backspace.
    */
   function erase(el, opts = {}) {
     const { speed = 22, cursor = true } = opts;
@@ -76,12 +93,18 @@
       }
 
       let cursorEl = el.querySelector(':scope > .cursor');
-      const textNodes = () =>
-        Array.from(el.childNodes).filter((n) => n.nodeType === Node.TEXT_NODE);
+      let firstChild = el.firstChild;
+      
+      if (!firstChild || firstChild.nodeType !== Node.TEXT_NODE) {
+        resolve();
+        return;
+      }
+
+      let characters = splitIntoGraphemes(firstChild.textContent);
 
       const tick = () => {
-        const nodes = textNodes();
-        if (!nodes.length) {
+        if (!characters.length) {
+          if (firstChild) firstChild.remove();
           if (cursor && !cursorEl) {
             cursorEl = document.createElement('span');
             cursorEl.className = 'cursor';
@@ -91,9 +114,8 @@
           resolve();
           return;
         }
-        const last = nodes[nodes.length - 1];
-        last.textContent = last.textContent.slice(0, -1);
-        if (!last.textContent) last.remove();
+        characters.pop();
+        firstChild.textContent = characters.join('');
         setTimeout(tick, speed);
       };
       tick();
@@ -101,15 +123,7 @@
   }
 
   /**
-   * Types each line in sequence. By default, erases the previous line
-   * (backspace-style) before typing the next one, rather than swapping
-   * text abruptly. The final line is left on screen (not erased) unless
-   * `opts.eraseLast` is true.
-   *
-   * @param {number} [opts.speed=45] typing speed, ms/char
-   * @param {number} [opts.eraseSpeed=22] erase speed, ms/char
-   * @param {number} [opts.hold=700] pause after a line finishes typing, before erasing
-   * @param {boolean} [opts.eraseLast=false] also erase after the final line
+   * Types each line in sequence.
    */
   async function typeSequence(el, lines, opts = {}) {
     const { hold = 700, eraseLast = false } = opts;
