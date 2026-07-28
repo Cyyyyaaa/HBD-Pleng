@@ -47,10 +47,10 @@
   function initAudioElements() {
     bgMusic = new Audio('assets/music/onlyone.mp4');
     bgMusic.loop = true;
-    bgMusic.volume = 0.30;
+    bgMusic.volume = 0.25;
 
-    clickSound = new Audio('assets/music/click.mp3');
-    clickSound.volume = 0.4;
+    clickSound = new Audio('assets/music/onlyone.mp4');
+    clickSound.volume = 0.25;
 
     const saved = readSavedState();
     if (saved) {
