@@ -49,9 +49,6 @@
     bgMusic.loop = true;
     bgMusic.volume = 0.25;
 
-    clickSound = new Audio('assets/music/onlyone.mp4');
-    clickSound.volume = 0.25;
-
     const saved = readSavedState();
     if (saved) {
       muted = !!saved.muted;
