@@ -1,28 +1,24 @@
 /**
  * wishes.js
- * Scatters clickable stars across the night-sky scene, each one holding a
- * short wish loaded from data/wishes.json. Clicking a star opens a small
- * bubble with the wish text and marks that star as revealed.
+ * Scatters clickable stars in the shape of letter 'P', each one holding a
+ * short wish loaded from data/wishes.json.
  */
 (function () {
   const { qs, loadJSON, randomBetween } = window.Utils;
 
-  function positionStars(count) {
-    // Deterministic-feeling scatter: split the sky into a loose grid, then
-    // jitter within each cell so stars never overlap or clump.
-    const cols = Math.ceil(Math.sqrt(count * 1.4));
-    const rows = Math.ceil(count / cols);
-    const cells = [];
-    for (let r = 0; r < rows; r += 1) {
-      for (let c = 0; c < cols; c += 1) cells.push({ r, c });
-    }
-    cells.sort(() => Math.random() - 0.5);
-
-    return cells.slice(0, count).map(({ r, c }) => ({
-      left: `${(c / cols) * 92 + randomBetween(1, 6)}%`,
-      top: `${(r / rows) * 88 + randomBetween(1, 6)}%`,
-    }));
-  }
+  // พิกัดรูปตัว P (รองรับดาวสูงสุด 10 ดวง)
+  const P_SHAPE_POSITIONS = [
+    { left: '38%', top: '20%' },
+    { left: '38%', top: '35%' },
+    { left: '38%', top: '50%' },
+    { left: '38%', top: '65%' },
+    { left: '38%', top: '80%' },
+    { left: '48%', top: '20%' },
+    { left: '58%', top: '23%' },
+    { left: '62%', top: '35%' },
+    { left: '58%', top: '47%' },
+    { left: '48%', top: '50%' }
+  ];
 
   async function init(root = document) {
     const sky = qs('#wish-sky', root);
@@ -32,7 +28,6 @@
     const wishes = (await loadJSON('data/wishes.json')) || [];
     if (!wishes.length) return;
 
-    const positions = positionStars(wishes.length);
     let revealedCount = 0;
 
     const bubble = document.createElement('div');
@@ -47,11 +42,14 @@
     updateProgress();
 
     wishes.forEach((wish, i) => {
+      // ดึงพิกัดจากรูปตัว P (หากคำอวยพรใน JSON มีมากกว่า 10 ข้อความ จะวนกลับมาใช้พิกัดแรก)
+      const pos = P_SHAPE_POSITIONS[i % P_SHAPE_POSITIONS.length];
+
       const star = document.createElement('button');
       star.type = 'button';
       star.className = 'wish-star';
-      star.style.left = positions[i].left;
-      star.style.top = positions[i].top;
+      star.style.left = pos.left;
+      star.style.top = pos.top;
       star.style.animationDelay = `${randomBetween(0, 2.5)}s`;
       star.setAttribute('aria-label', `Reveal wish ${i + 1} of ${wishes.length}`);
       star.dataset.revealed = 'false';
