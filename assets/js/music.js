@@ -49,6 +49,9 @@
     bgMusic.loop = true;
     bgMusic.volume = 0.25;
 
+    clickSound = new Audio('assets/music/click.mp3');
+    clickSound.volume = 0.25;
+
     const saved = readSavedState();
     if (saved) {
       muted = !!saved.muted;
