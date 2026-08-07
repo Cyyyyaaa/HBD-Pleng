@@ -8,7 +8,7 @@
  */
 (function () {
   // 🎯 วันที่เปิดให้เข้าเว็บได้ (เวลาไทย GMT+7) — เปลี่ยนได้ตรงนี้
-  const TARGET_ISO = '2026-08-09T00:00:00+07:00';
+  const TARGET_ISO = '2026-08-07T13:06:00+07:00';
 
   function proceed() {
     if (window.Lockscreen?.init) {
