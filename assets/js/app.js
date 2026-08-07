@@ -112,7 +112,9 @@
   on('app:loading-complete', boot);
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (window.Lockscreen) {
+    if (window.Gate) {
+      window.Gate.init(); // checks the date first, then hands off to Lockscreen/Loading
+    } else if (window.Lockscreen) {
       window.Lockscreen.init(); // calls window.Loading.init() itself once unlocked
     } else {
       window.Loading.init();
