@@ -1,0 +1,110 @@
+/* ==========================================================================
+   gate.css
+   The very first screen of all — a countdown gate that blocks the whole
+   site until 9 สิงหาคม 2569 (Aug 9, 2026) in Thailand time (GMT+7).
+   Sits above #lock-screen until the date arrives, then fades away and
+   hands off to the existing lock/loading flow.
+   ========================================================================== */
+
+#gate-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 120; /* above #lock-screen (110) */
+  display: none; /* toggled to flex by gate.js only if the date hasn't arrived */
+  align-items: center;
+  justify-content: center;
+  background: var(--color-night);
+  padding: var(--space-md);
+  transition: opacity var(--dur-slow) var(--ease-soft), visibility var(--dur-slow) var(--ease-soft);
+}
+#gate-screen.is-unlocking { pointer-events: none; }
+#gate-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gate-card {
+  position: relative;
+  z-index: 1;
+  width: min(360px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gate-mark {
+  color: var(--color-gold);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-sm);
+  animation: pulse-soft 2.6s ease-in-out infinite;
+}
+
+.gate-hint {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: var(--lh-normal);
+  color: var(--color-white);
+  margin-bottom: var(--space-lg);
+}
+.gate-hint span {
+  display: inline-block;
+  margin-top: 2px;
+  font-family: var(--font-accent);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-mid);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---- countdown numbers -------------------------------------------------- */
+
+.gate-countdown {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.gate-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+}
+
+.gate-unit strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  font-weight: 500;
+  color: var(--color-gold);
+  line-height: var(--lh-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.gate-unit span {
+  margin-top: 4px;
+  font-family: var(--font-accent);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-mid);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gate-target {
+  font-family: var(--font-accent);
+  font-size: var(--fs-small);
+  color: rgba(248, 200, 220, 0.9); /* blush */
+}
+
+/* correct-date unlock: card breathes once, then the whole screen fades (see #gate-screen.is-hidden) */
+.gate-card.is-unlocked { animation: gate-unlock 0.6s var(--ease-out) forwards; }
+
+@keyframes gate-unlock {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@media (max-width: 375px) {
+  .gate-countdown { gap: var(--space-xs); }
+  .gate-unit { min-width: 46px; }
+}
