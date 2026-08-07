@@ -89,7 +89,7 @@
           });
         } else {
           // ⚠️ กรณีใส่ผิด 1-2 ครั้ง
-          showPopup(`ไม่ใช่ที! ${msg}\n(ได้อีก 1 ${2 - failCount} ครั้งwa)`, () => {
+          showPopup(`ไม่ใช่ที! ${msg}\n(ได้อีก ${2 - failCount} ครั้งwa)`, () => {
             busy = false;
           });
         }
