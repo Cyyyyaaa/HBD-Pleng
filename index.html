@@ -20,9 +20,42 @@
   <link rel="stylesheet" href="assets/css/animation.css" />
   <link rel="stylesheet" href="assets/css/responsive.css" />
   <link rel="stylesheet" href="assets/css/lockscreen.css" />
+  <link rel="stylesheet" href="assets/css/gate.css" />
 </head>
 <body>
   <a class="skip-link" href="#scenes-root"></a>
+
+  <!-- Scene -1 — Countdown Gate (shown before anything else, incl. the lock
+       screen). Blocks the whole site until 9 สิงหาคม 2569, 00:00 น. เวลาไทย. -->
+  <div id="gate-screen" role="dialog" aria-modal="true" aria-label="นับถอยหลังก่อนเปิดเว็บ">
+    <canvas id="gate-stars" class="stars-canvas" aria-hidden="true"></canvas>
+
+    <div class="gate-card">
+      <p class="gate-mark" aria-hidden="true">✦</p>
+      <p class="gate-hint">ยังไม่ถึงวันนั้นนะ<br /><span>รอแป๊บนึงนะ 🤍</span></p>
+
+      <div class="gate-countdown" aria-live="polite">
+        <div class="gate-unit">
+          <strong id="gate-days">0</strong>
+          <span>วัน</span>
+        </div>
+        <div class="gate-unit">
+          <strong id="gate-hours">00</strong>
+          <span>ชม.</span>
+        </div>
+        <div class="gate-unit">
+          <strong id="gate-minutes">00</strong>
+          <span>นาที</span>
+        </div>
+        <div class="gate-unit">
+          <strong id="gate-seconds">00</strong>
+          <span>วินาที</span>
+        </div>
+      </div>
+
+      <p class="gate-target">9 สิงหาคม 2569</p>
+    </div>
+  </div>
 
   <!-- Scene 0 — Passcode Lock (shown before anything else, incl. Loading) -->
   <div id="lock-screen" role="dialog" aria-modal="true" aria-label="ใส่รหัสผ่านเพื่อเข้าเว็บ">
@@ -87,6 +120,7 @@
   </button>
 
   <script src="assets/js/utils.js"></script>
+  <script src="assets/js/gate.js"></script>
   <script src="assets/js/lockscreen.js"></script>
   <script src="assets/js/loading.js"></script>
   <script src="assets/js/scroll.js"></script>
