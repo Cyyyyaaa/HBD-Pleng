@@ -3,7 +3,7 @@
  * A cute PIN-code gate shown before anything else (before #loading-screen).
  * Supports on-screen keypad taps and the physical keyboard. On success,
  * plays an unlock animation, hides itself, then hands off to Loading.init().
- * On failure, shakes, resets, and shows a little scolding message.
+ * On failure, shows a pop-up message, resets, and auto-fills on 3rd failure.
  */
 (function () {
   // 🔑 เปลี่ยนรหัสผ่านตรงนี้ได้เลย (จำนวนหลักจะปรับจุด PIN ให้อัตโนมัติ)
@@ -38,14 +38,17 @@
 
     let entered = '';
     let busy = false; // true while a wrong/right animation is playing
+    let failCount = 0; // 🔢 ตัวนับจำนวนครั้งที่ใส่รหัสผิด
 
     function showMessage(text, isSuccess) {
+      if (!messageEl) return;
       messageEl.textContent = text;
       messageEl.classList.toggle('is-success', !!isSuccess);
       messageEl.classList.add('is-visible');
     }
 
     function clearMessage() {
+      if (!messageEl) return;
       messageEl.classList.remove('is-visible', 'is-success');
     }
 
@@ -59,7 +62,6 @@
       const dot = dots[entered.length - 1];
       if (!dot) return;
       dot.classList.remove('is-pop');
-      // restart the animation even if it was already applied
       void dot.offsetWidth;
       dot.classList.add('is-pop');
     }
@@ -72,14 +74,62 @@
     function shakeAndReset() {
       busy = true;
       card.classList.add('is-shaking');
+      failCount += 1;
+
       const msg = WRONG_MESSAGES[Math.floor(Math.random() * WRONG_MESSAGES.length)];
-      showMessage(msg, false);
 
       setTimeout(() => {
         card.classList.remove('is-shaking');
         reset();
-        busy = false;
+
+        // 🚨 กรณีใส่รหัสผิดครบ 3 ครั้ง
+        if (failCount >= 3) {
+          showPopup('ใส่ผิด 3 ครั้งแล้วน้า! เดี๋ยวเฉลยและพิมพ์ให้อัตโนมัติเลยละกัน 💖', () => {
+            autoFillAndUnlock();
+          });
+        } else {
+          // ⚠️ กรณีใส่ผิด 1-2 ครั้ง
+          showPopup(`ผิดแล้ว! ${msg}\n(ลองผิดได้อีก ${3 - failCount} ครั้ง)`, () => {
+            busy = false;
+          });
+        }
       }, 500);
+    }
+
+    // 💬 ฟังก์ชันจัดการ Pop-up (ใช้ Swal หากมี หรือ fallback เป็น alert)
+    function showPopup(text, onCloseCallback) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: 'เดี๋ยวก่อนนะ!',
+          text: text,
+          icon: 'warning',
+          confirmButtonText: 'ตกลง',
+          confirmButtonColor: '#ff7b9c'
+        }).then(() => {
+          if (onCloseCallback) onCloseCallback();
+        });
+      } else {
+        alert(text);
+        if (onCloseCallback) onCloseCallback();
+      }
+    }
+
+    // 🤖 ฟังก์ชันพิมพ์รหัสอัตโนมัติเมื่อผิดครบ 3 ครั้ง
+    function autoFillAndUnlock() {
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index < CORRECT_PIN.length) {
+          entered += CORRECT_PIN[index];
+          renderDots();
+          popLastDot();
+          index++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            unlock();
+          }, 300);
+        }
+      }, 250); // พิมพ์ทีละหลักทุกๆ 250ms ให้ดูเป็นธรรมชาติ
     }
 
     function unlock() {
@@ -92,7 +142,6 @@
       setTimeout(() => {
         screen.classList.add('is-hidden');
         document.removeEventListener('keydown', onKeydown);
-        // Hand off to the loading screen once the lock has faded away.
         if (window.Loading?.init) window.Loading.init();
       }, 700);
     }
