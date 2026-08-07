@@ -10,7 +10,7 @@
   const CORRECT_PIN = '0908';
 
   const WRONG_MESSAGES = [
-    'วันเกิดน้องไง ลองใหม่อีกทีคั้บ 🥹',
+    'วันเกิดเพลงไง ลองใหม่อีกทีคั้บบ',
   ];
 
   function init() {
