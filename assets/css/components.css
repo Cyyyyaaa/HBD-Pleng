@@ -242,6 +242,9 @@
   letter-spacing: var(--ls-mid);
 }
 
+นี่คือชุด CSS ทั้งหมดที่นำส่วนปรับแต่งข้อ 3 ประกอบเข้ากับ Code ต้นฉบับเรียบร้อยแล้ว พร้อมคัดลอกไปใช้งานได้ทันทีครับ
+
+```css
 /* ---------------------------------------------------------------------- */
 /* Letter / envelope — clean, modern, minimalist                          */
 /* ---------------------------------------------------------------------- */
@@ -317,14 +320,21 @@
   max-width: 32rem;
   margin: var(--space-xl) auto 0;
   background: var(--color-paper);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.02));
   color: var(--color-ink);
   border: 1px solid var(--color-hairline);
+  outline: 1px solid rgba(247, 208, 96, 0.25);
+  outline-offset: -6px;
   border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  box-shadow: 0 12px 32px rgba(13, 27, 42, 0.16);
+  padding: calc(var(--space-lg) * 1.25) var(--space-lg);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.02),
+    0 8px 16px rgba(13, 27, 42, 0.08),
+    0 20px 40px rgba(13, 27, 42, 0.12);
   font-family: var(--font-body);
   font-size: 1.05rem;
-  line-height: var(--lh-loose);
+  line-height: 1.8;
+  letter-spacing: 0.01em;
   opacity: 0;
   transform: translateY(14px);
   transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
@@ -335,17 +345,33 @@
   width: 40px;
   height: 2px;
   background: var(--color-gold);
-  margin: 0 auto var(--space-md);
+  margin: 0 auto calc(var(--space-md) * 1.2);
+  border-radius: 2px;
 }
 .letter-paper.is-visible { opacity: 1; transform: translateY(0); }
-.letter-body p { margin-bottom: 1.1em; }
+.letter-body {
+  text-align: justify;
+  text-justify: inter-word;
+}
+.letter-body p { margin-bottom: 1.25em; }
 .letter-body p:last-child { margin-bottom: 0; }
+.letter-body p:first-child::first-letter {
+  font-family: var(--font-display);
+  font-size: 2.6em;
+  float: left;
+  line-height: 0.8;
+  margin-right: 0.15em;
+  margin-top: 0.05em;
+  color: var(--color-gold);
+}
 .letter-paper .cursor {
   display: inline-block;
   width: 2px;
-  background: var(--color-ink);
-  margin-left: 1px;
-  animation: blink 1s step-end infinite;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  background: var(--color-gold);
+  margin-left: 2px;
+  animation: blink 0.9s ease-in-out infinite;
 }
 
 /* ---------------------------------------------------------------------- */
